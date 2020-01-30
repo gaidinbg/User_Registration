@@ -1,47 +1,47 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 29/01/2020
- * Time: 00:45
- */
 
 namespace App\Controller;
 
-
+use App\Entity\User;
+use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @Route("/register", name="app_register")
      */
-    public function index()
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        return new Response("first try");
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            // do anything else you need here, like send an email
+
+            return $this->redirectToRoute('app_index');
+          //  return new Response("You are logged in successfully as:" . $user->getEmail());
+        }
+
+        return $this->render('registration/register.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
     }
-
-//    /**
-//     * @Route("/petko/good-look")
-//     */
-//    public function show()
-//    {
-//        return new Response("Looking good");
-//    }
-
-    /**
-     * @Route("/petko/{slug}")
-     */
-    public function fire($slug)
-    {
-//        return new Response(sprintf("Looking good: %s",$slug ));
-        $amountFields = ['once','pretty darn good','Infinite'];
-        return $this->render('registration/form.html.twig',[
-            'title'=> ucwords(str_replace('-',' ',$slug)),
-            'amount'=> $amountFields,]);
-    }
-
-
 }
