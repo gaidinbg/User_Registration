@@ -1,19 +1,61 @@
 {% extends  'base.html.twig'%}
 {% block title %} Framework Course{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="css/coming-soon.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+{% endblock %}
+
 {% block body %}
 {#comment#}
+    <div class="overlay"></div>
+    <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+        <source src="mp4/bg.mp4" type="video/mp4">
+    </video>
+    <div class="masthead">
+        <div class="masthead-bg"></div>
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-12 my-auto">
+                    <div class="masthead-content text-white py-5 py-md-0">
+                        {% if app.user %}
+                            <div class="mb-3">
+                                <div class="alert alert-info">   Logged as {{ app.user.username}}, <a href="{{ path('app_logout') }}">Logout</a></div>
+                            </div>
+                        {% endif %}
+                        <h1 class="mb-3">Welcome!</h1>
+                        <p class="mb-5">We're working hard to finish the development of this site.
+                            <strong><a href="{{ path('app_register') }}">Sign up</a></strong> for updates!
+                            Or go to <strong> <a href="{{ path('app_login') }}">Login section</a> </strong>to review your profile!</p>
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.username}}, <a href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    {% endif %}
+    </div>
 
-<h1>Welcome to our Service Page</h1>
+    <div class="social-icons">
+        <ul class="list-unstyled text-center mb-0">
+            <li class="list-unstyled-item">
+                <a href="#">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </li>
+            <li class="list-unstyled-item">
+                <a href="#">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </li>
+            <li class="list-unstyled-item">
+                <a href="#">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
 
 
-<p><span class="subs-paragraph" data-start-time="75.866">If you're visiting us for a first time, welcome! </span>
-    <span class="subs-paragraph" data-start-time="80.256">Our service is available only for  <em>registered</em> users! </span>
-    <span class="subs-paragraph" data-start-time="82.746">If you already has an account please go to our <em><a href="{{ path('app_login') }}">Login section</a></em>  </span></p>
-   <p> <span class="subs-paragraph" data-start-time="88.746">If you still do not have an account please  <em><a href="{{ path('app_register') }}">register</a></em>    for our services. </span></p>
+
 {% endblock %}
